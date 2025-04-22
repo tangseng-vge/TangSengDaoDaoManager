@@ -214,12 +214,16 @@ const column = reactive<Column.ColumnOptions[]>([
     label: '操作',
     align: 'center',
     fixed: 'right',
-    width: 180,
+    width: 240,
     render: (scope: any) => {
       return (
         <ElSpace>
           <ElButton type="primary" onClick={() => onSand(scope.row)}>
             发消息
+          </ElButton>
+          {/* 添加修改密码选项 */}
+          <ElButton type="primary" onClick={() => handleChangePassword(scope.row)}>
+            修改密码
           </ElButton>
           <ElDropdown
             v-slots={{
@@ -234,10 +238,6 @@ const column = reactive<Column.ColumnOptions[]>([
                     <ElDropdownItem onClick={() => onUseBlackList(scope.row)}>
                       <i-bd-personal-privacy class={'mr-4px'} />
                       黑名单列表
-                    </ElDropdownItem>
-                    {/* 添加修改密码选项 */}
-                    <ElDropdownItem onClick={() => handleChangePassword(scope.row)}>
-                      修改密码
                     </ElDropdownItem>
 
                     <ElDropdownItem onClick={() => onUseLiftban(scope.row)}>
