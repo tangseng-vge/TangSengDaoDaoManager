@@ -46,6 +46,37 @@
                   <el-radio :label="0">否</el-radio>
                 </el-radio-group>
               </el-form-item>
+              <el-form-item label="API地址：">
+                <el-input v-model="formData.api_addr" />
+              </el-form-item>
+              <el-form-item label="API地址(境外)：">
+                <el-input v-model="formData.api_addr_jw" />
+              </el-form-item>
+              <el-form-item label="web地址：">
+                <el-input v-model="formData.web_addr" />
+              </el-form-item>
+              <el-form-item label="web地址(境外)：">
+                <el-input v-model="formData.web_addr_jw" />
+              </el-form-item>
+              <el-form-item label="WS地址：">
+                <el-input v-model="formData.ws_addr" />
+              </el-form-item>
+              <el-form-item label="WS地址(境外)：">
+                <el-input v-model="formData.ws_addr_jw" />
+              </el-form-item>
+              <el-form-item label="WSS地址：">
+                <el-input v-model="formData.wss_addr" />
+              </el-form-item>
+              <el-form-item label="WSS地址(境外)：">
+                <el-input v-model="formData.wss_addr_jw" />
+              </el-form-item>
+              <el-form-item label="socket地址：">
+                <el-input v-model="formData.socket_addr" />
+              </el-form-item>
+              <el-form-item label="socket地址(境外)：">
+                <el-input v-model="formData.socket_addr_jw" />
+              </el-form-item>
+
               <el-form-item label="消息可撤回时长：">
                 <el-select v-model="formData.revoke_second" class="!w-100%">
                   <el-option label="1分钟" :value="60" />
@@ -97,14 +128,24 @@ import { ElMessage } from 'element-plus';
 import { getAppconfigGet, updateAppconfigPost } from '@/api/setting';
 // 表单
 const formData = reactive({
-  welcome_message: '欢迎你来到悟空聊天。',
+  welcome_message: '',
   revoke_second: 60,
   new_user_join_system_group: 1,
   search_by_phone: 1,
   send_welcome_message_on: 1,
   register_invite_on: 1,
   invite_system_account_join_group_on: 1,
-  register_user_must_complete_info_on: 0
+  register_user_must_complete_info_on: 0,
+  api_addr: '',
+  api_addr_jw: '',
+  web_addr: '',
+  web_addr_jw: '',
+  ws_addr: '',
+  ws_addr_jw: '',
+  wss_addr: '',
+  wss_addr_jw: '',
+  socket_addr: '',
+  socket_addr_jw: ''
 });
 //  初始化数据
 const initData = () => {
@@ -116,7 +157,17 @@ const initData = () => {
     formData.send_welcome_message_on = res.send_welcome_message_on;
     formData.register_invite_on = res.register_invite_on;
     formData.invite_system_account_join_group_on = res.invite_system_account_join_group_on;
-    formData.register_user_must_complete_info_on = res.register_user_must_complete_info_on;
+    formData.api_addr = res.api_addr; // api地址
+    formData.api_addr_jw = res.api_addr_jw; // api地址境外
+    formData.web_addr = res.web_addr;
+    formData.web_addr_jw = res.web_addr_jw;
+    formData.ws_addr = res.ws_addr;
+    formData.ws_addr_jw = res.ws_addr_jw;
+    formData.wss_addr = res.wss_addr;
+    formData.wss_addr_jw = res.wss_addr_jw;
+    formData.socket_addr = res.socket_addr;
+    formData.socket_addr_jw = res.socket_addr_jw;
+    //  修改密码
   });
 };
 

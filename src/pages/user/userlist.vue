@@ -58,6 +58,45 @@
     <bd-send-msg v-model:value="sendValue" v-bind="sendInfo" />
     <!-- 查看设备 -->
     <Devices v-model:value="devicesValue" :uid="devicesUid" />
+
+    <!-- 修改密码弹窗 -->
+    <el-dialog
+      v-model="changePasswordDialog"
+      title="修改密码"
+      width="400px"
+      :close-on-click-modal="false"
+    >
+      <el-form
+        ref="passwordFormRef"
+        :model="passwordForm"
+        :rules="passwordRules"
+        label-width="100px"
+      >
+        <el-form-item label="新密码" prop="password">
+          <el-input
+            v-model="passwordForm.password"
+            type="password"
+            placeholder="请输入新密码"
+            show-password
+          />
+        </el-form-item>
+        <el-form-item label="确认密码" prop="confirmPassword">
+          <el-input
+            v-model="passwordForm.confirmPassword"
+            type="password"
+            placeholder="请再次输入新密码"
+            show-password
+          />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+    <span class="dialog-footer">
+      <el-button @click="changePasswordDialog = false">取消</el-button>
+      <el-button type="primary" @click="submitChangePassword">确定</el-button>
+    </span>
+      </template>
+    </el-dialog>
+
   </bd-page>
 </template>
 
@@ -74,7 +113,7 @@ import Devices from '@/pages/message/components/Devices.vue';
 import { useUserStore } from '@/stores/modules/user';
 import { BU_DOU_CONFIG } from '@/config';
 // API 接口
-import { userListGet, userLiftbanPut } from '@/api/user';
+import { userListGet, userLiftbanPut, updatePasswd } from '@/api/user';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -196,6 +235,11 @@ const column = reactive<Column.ColumnOptions[]>([
                       <i-bd-personal-privacy class={'mr-4px'} />
                       黑名单列表
                     </ElDropdownItem>
+                    {/* 添加修改密码选项 */}
+                    <ElDropdownItem onClick={() => handleChangePassword(scope.row)}>
+                      修改密码
+                    </ElDropdownItem>
+
                     <ElDropdownItem onClick={() => onUseLiftban(scope.row)}>
                       <i-bd-info class={'mr-4px'} />
                       {scope.row.status === 1 ? '封禁' : '解禁'}
@@ -324,6 +368,60 @@ const onUseLiftban = (item: any) => {
       });
     });
 };
+
+// 修改密码相关
+const changePasswordDialog = ref(false);
+const passwordForm = reactive({
+  uid: '',
+  password: '',
+  confirmPassword: '',
+});
+const passwordRules = {
+  password: [
+    { required: true, message: '请输入新密码', trigger: 'blur' },
+    { min: 6, message: '密码长度至少6位', trigger: 'blur' }
+  ],
+  confirmPassword: [
+    { required: true, message: '请再次输入新密码', trigger: 'blur' },
+    {
+      validator: (rule: any, value: string, callback: any) => {
+        if (value !== passwordForm.password) {
+          callback(new Error('两次输入的密码不一致'));
+        } else {
+          callback();
+        }
+      },
+      trigger: 'blur'
+    }
+  ]
+};
+const passwordFormRef = ref();
+
+// 打开修改密码弹窗
+const handleChangePassword = (row: any) => {
+  passwordForm.uid = row.uid;
+  passwordForm.password = '';
+  passwordForm.confirmPassword = '';
+  changePasswordDialog.value = true;
+};
+
+// 提交修改密码
+const submitChangePassword = async () => {
+  if (!passwordFormRef.value) return;
+
+  try {
+    await passwordFormRef.value.validate();
+
+    // 这里需要替换为实际的修改密码API调用
+    await updatePasswd({ uid: passwordForm.uid, password: passwordForm.password});
+
+    ElMessage.success('密码修改成功');
+    changePasswordDialog.value = false;
+  } catch (error) {
+    console.error('表单验证失败', error);
+  }
+};
+
 
 // 查看设备
 const devicesValue = ref(false);

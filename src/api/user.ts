@@ -17,6 +17,13 @@ export function userListGet(params: any) {
     params
   });
 }
+export function updatePasswd(data: any) {
+  return request({
+    url: '/manager/user/updatePasswd',
+    method: 'post',
+    data
+  });
+}
 
 // 封禁用户列表
 export function userDisablelistGet(params: any) {
