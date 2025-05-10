@@ -1,6 +1,6 @@
 <template>
   <div class="footer flex-center">
-    <a href="https://github.com" target="_blank"> 2023 © Bage. </a>
+    <a href="https://github.com" target="_blank"> 2025 © Bage. </a>
   </div>
 </template>
 
